@@ -15,9 +15,9 @@ public interface MicroserviceNotesProxy {
     @GetMapping(value = "/notes")
     List<NoteBean> listDesNotes();
 
-    @GetMapping("/notes/{patientId}")
-    NoteBean getNotesByPatientId( @PathVariable Long patientId);// a implementer dans apiNotes
+    @GetMapping("/notesList/{patientId}")
+   List <NoteBean> getNotesByPatientId( @PathVariable Long patientId);
 
     @PostMapping("/notes")
-    void saveNote(@RequestBody NoteBean notetosave);
+    void saveNote(@RequestBody NoteBean note);
 }

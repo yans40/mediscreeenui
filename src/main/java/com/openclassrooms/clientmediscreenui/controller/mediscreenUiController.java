@@ -67,8 +67,13 @@ public class mediscreenUiController {
     public String showPatientNoteForm(@PathVariable Long id, Model model) {
         NoteBean noteBean= new NoteBean();
         PatientBean patientBean=patientsProxy.recupererUnPatient(id);
+        // Récupérer les anciennes notes du patient à partir de l'API Note
+        List<NoteBean> oldNotes = notesProxy.getNotesByPatientId(id);
+
         model.addAttribute("patient",patientBean);
         model.addAttribute("noteBean",noteBean);
+        model.addAttribute("oldNotes",oldNotes);
+
         return "noteForm";
     }
 
@@ -84,6 +89,6 @@ public class mediscreenUiController {
             notesProxy.saveNote(note);
 
             // Redirigez vers la page d'accueil ou une autre vue si nécessaire
-            return "redirect:/";
+            return "redirect:/addNote/{id}";
     }
 }

@@ -6,42 +6,44 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body>
-<div class="container mt-2">
-<h1>Mediscreen Patient Manager</h1>
+<div class="container mt-4">
+    <h1 class="text-center">Mediscreen Patient Manager</h1>
 </div>
 <div class="m-2">
-    <a class="h3" th:href="@{/patient/new}">Add New Patient</a>
+    <a class="btn btn-primary" th:href="@{/patient/new}">Add New Patient</a>
 </div>
-<div th:if="${message}" class="alert-success text-center">
+<div th:if="${message}" class="alert alert-success text-center">
     [[${message}]]
 </div>
-<table class="table table-bordered" >
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Prenom</th>
-        <th>Nom</th>
-        <th>Genre</th>
-        <th>Adresse</th>
-        <th>Date naissance</th>
-        <th>Gestion patient</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="p:${patients}">
-        <td th:text="${p.id}"></td>
-        <td th:text="${p.prenom}"></td>
-        <td th:text="${p.nom}"></td>
-        <td th:text="${p.genre}"></td>
-        <td th:text="${p.adressePostale}"></td>
-        <td th:text="${p.dateDeNaissance}"></td>
-        <td>
-            <a th:href="@{/updatePatient/{id}(id=${p.getId()})}">Edit</a>&nbsp;
-            <a th:href="@{/addNote/{id}(id=${p.getId()})}">Notes</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Prenom</th>
+            <th>Nom</th>
+            <th>Genre</th>
+            <th>Adresse</th>
+            <th>Date de naissance</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p:${patients}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.prenom}"></td>
+            <td th:text="${p.nom}"></td>
+            <td th:text="${p.genre}"></td>
+            <td th:text="${p.adressePostale}"></td>
+            <td th:text="${p.dateDeNaissance}"></td>
+            <td>
+                <a class="btn btn-primary btn-sm" th:href="@{/updatePatient/{id}(id=${p.getId()})}">Edit</a>
+                <a class="btn btn-secondary btn-sm" th:href="@{/addNote/{id}(id=${p.getId()})}">Notes</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
