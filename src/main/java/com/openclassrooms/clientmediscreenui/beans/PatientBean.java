@@ -1,6 +1,7 @@
 package com.openclassrooms.clientmediscreenui.beans;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.openclassrooms.clientmediscreenui.constant.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class PatientBean {
     private Long id;
     private String prenom;
     private String nom;
+    private Genre genre;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateDeNaissance;
     private String adressePostale;

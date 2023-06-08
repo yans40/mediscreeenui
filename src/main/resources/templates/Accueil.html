@@ -9,14 +9,22 @@
 <div class="container">
 <h1>Mediscreen Patient Manager</h1>
 </div>
+<div class="m-2">
+    <a class="h3 " th:href="@{/patient/new}">Add New Patient</a>
+</div>
+<div th:if="${message}" class="alert-success text-center">
+    [[${message}]]
+</div>
 <table class="table">
     <thead>
     <tr>
         <th>ID</th>
         <th>Prenom</th>
         <th>Nom</th>
+        <th>Genre</th>
         <th>Adresse</th>
-        <th>date naissance</th>
+        <th>Date naissance</th>
+        <th>Gestion patient</th>
     </tr>
     </thead>
     <tbody>
@@ -24,11 +32,12 @@
         <td th:text="${p.id}"></td>
         <td th:text="${p.prenom}"></td>
         <td th:text="${p.nom}"></td>
+        <td th:text="${p.genre}"></td>
         <td th:text="${p.adressePostale}"></td>
         <td th:text="${p.dateDeNaissance}"></td>
         <td>
-            <a class="h4 mr-3">Edit</a>
-            <a class="h4 mr-3">Delete</a>
+            <a th:href="@{/updatePatient/{id}(id=${p.getId()})}">Edit</a>&nbsp;
+            <a href="">Notes</a>
         </td>
     </tr>
     </tbody>
