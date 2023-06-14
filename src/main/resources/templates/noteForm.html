@@ -25,7 +25,7 @@
         <tbody>
         <tr th:each="oldNote : ${oldNotes}">
             <td th:text="${#dates.format(oldNote.date, 'dd/MM/yyyy HH:mm')}"></td>
-            <td th:text="${oldNote.notes}"></td>
+            <td th:text="${oldNote.observation}"></td>
         </tr>
         </tbody>
     </table>

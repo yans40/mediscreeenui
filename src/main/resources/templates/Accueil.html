@@ -26,6 +26,7 @@
             <th>Adresse</th>
             <th>Date de naissance</th>
             <th>Action</th>
+            <th>Situation</th>
         </tr>
         </thead>
         <tbody>
@@ -40,6 +41,7 @@
                 <a class="btn btn-primary btn-sm" th:href="@{/updatePatient/{id}(id=${p.getId()})}">Edit</a>
                 <a class="btn btn-secondary btn-sm" th:href="@{/addNote/{id}(id=${p.getId()})}">Notes</a>
             </td>
+            <td th:text="${assessmentResults[p.id]}"></td>
         </tr>
         </tbody>
     </table>

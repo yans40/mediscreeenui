@@ -2,6 +2,7 @@ package com.openclassrooms.clientmediscreenui.controller;
 
 import com.openclassrooms.clientmediscreenui.beans.NoteBean;
 import com.openclassrooms.clientmediscreenui.beans.PatientBean;
+import com.openclassrooms.clientmediscreenui.proxies.MicroserviceDiabeteAssessmentProxy;
 import com.openclassrooms.clientmediscreenui.proxies.MicroserviceNotesProxy;
 import com.openclassrooms.clientmediscreenui.proxies.MicroservicePatientsProxy;
 import lombok.extern.slf4j.Slf4j;
@@ -11,27 +12,36 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Controller
 public class mediscreenUiController {
-    private final MicroservicePatientsProxy patientsProxy;
     @Autowired
     MicroserviceNotesProxy notesProxy;
 
-    public mediscreenUiController(MicroservicePatientsProxy patientsProxy) {
-        this.patientsProxy = patientsProxy;
-    }
+    @Autowired
+    MicroserviceDiabeteAssessmentProxy diabeteAssessmentProxy;
+    @Autowired
+    MicroservicePatientsProxy patientsProxy;
+
 
     @RequestMapping("/")
     public String accueilDisplay(Model model) {
-
         List<PatientBean> patients = patientsProxy.listDesPatients();
+
+        Map<Long, String> assessmentResults = new HashMap<>();
+        for (PatientBean patientBean : patients) {
+            String assessmentResult = riskEvaluator(patientBean.getId());
+            assessmentResults.put(patientBean.getId(), assessmentResult);
+        }
+
+        model.addAttribute("assessmentResults", assessmentResults);
         model.addAttribute("patients", patients);
+
         return "Accueil";
     }
+
 
     @GetMapping("/patient/new")
     public String showNewForm(Model model) {
@@ -65,30 +75,36 @@ public class mediscreenUiController {
 
     @GetMapping("addNote/{id}")
     public String showPatientNoteForm(@PathVariable Long id, Model model) {
-        NoteBean noteBean= new NoteBean();
-        PatientBean patientBean=patientsProxy.recupererUnPatient(id);
+        NoteBean noteBean = new NoteBean();
+        PatientBean patientBean = patientsProxy.recupererUnPatient(id);
         // Récupérer les anciennes notes du patient à partir de l'API Note
         List<NoteBean> oldNotes = notesProxy.getNotesByPatientId(id);
 
-        model.addAttribute("patient",patientBean);
-        model.addAttribute("noteBean",noteBean);
-        model.addAttribute("oldNotes",oldNotes);
+        model.addAttribute("patient", patientBean);
+        model.addAttribute("noteBean", noteBean);
+        model.addAttribute("oldNotes", oldNotes);
 
         return "noteForm";
     }
 
     @PostMapping("addNote/{id}")
-    public String saveNote(@PathVariable("id") Long patientId, @RequestParam("notes") String notes) {
-            // Créez une nouvelle instance de Note avec les données fournies
-            NoteBean note = new NoteBean();
-            note.setPatientId(patientId);
-            note.setNotes(notes);
-            note.setDate(new Date());
+    public String saveNote(@PathVariable("id") Long patientId, @RequestParam("notes") String observation) {
+        // Créez une nouvelle instance de Note avec les données fournies
+        NoteBean note = new NoteBean();
+        note.setPatientId(patientId);
+        note.setObservation(observation);
+        note.setDate(new Date());
 
-            // Appelez le service pour persister la note
-            notesProxy.saveNote(note);
+        // Appelez le service pour persister la note
+        notesProxy.saveNote(note);
 
-            // Redirigez vers la page d'accueil ou une autre vue si nécessaire
-            return "redirect:/addNote/{id}";
+        // Redirigez vers la page d'accueil ou une autre vue si nécessaire
+        return "redirect:/addNote/{id}";
+    }
+
+    @GetMapping("evaluatePatientDiabeteRisk")
+    public String riskEvaluator(@PathVariable("id") Long patientId) {
+      return diabeteAssessmentProxy.evaluerRisque(patientId);
+
     }
 }

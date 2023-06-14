@@ -15,6 +15,6 @@ public class NoteBean {
     private String id;
     private Long patientId;
     private String patient;
-    private String notes;
+    private String observation;
     private Date date;
 }
