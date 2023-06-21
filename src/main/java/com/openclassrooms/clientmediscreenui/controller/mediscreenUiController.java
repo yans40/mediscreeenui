@@ -73,6 +73,12 @@ public class mediscreenUiController {
         return "redirect:/";
     }
 
+//    @GetMapping("/updateNote/{id}")
+//    public String showNoteupdateForm(@PathVariable("id") Long id, Model model) {
+//
+//        log.info("dirige vers le formulaire de mise à jour des notes");
+//        return "updateNote";
+//    }
     @GetMapping("addNote/{id}")
     public String showPatientNoteForm(@PathVariable Long id, Model model) {
         NoteBean noteBean = new NoteBean();
