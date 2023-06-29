@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "microservice-notes", url="localhost:8082/apiNote" )
+@FeignClient(name = "microservice-notes", url="${API_NOTE_URL}" )
 public interface MicroserviceNotesProxy {
-    @GetMapping(value = "/notes")
+    @GetMapping(value = "/apiNote/notes")
     List<NoteBean> listDesNotes();
 
-    @GetMapping("/notesList/{patientId}")
+    @GetMapping(value = "/apiNote/notesList/{patientId}")
    List <NoteBean> getNotesByPatientId( @PathVariable Long patientId);
 
-    @PostMapping("/notes")
+    @PostMapping(value = "/apiNote/notes")
     void saveNote(@RequestBody NoteBean note);
 }

@@ -58,7 +58,7 @@ public class mediscreenUiController {
     }
 
     @GetMapping("/updatePatient/{id}")
-    public String showPatientupdateForm(@PathVariable("id") Long id, Model model) {
+    public String showPatientupdateForm(@PathVariable(name = "id") Long id, Model model) {
         PatientBean patientBean = patientsProxy.recupererUnPatient(id);
         model.addAttribute("patient", patientBean);
         log.info("dirige vers le formulaire de mise à jour");
@@ -66,7 +66,7 @@ public class mediscreenUiController {
     }
 
     @PostMapping("/patient/{id}")
-    public String updatePatient(@PathVariable("id") Long id, PatientBean updatedPatient, RedirectAttributes ra) {
+    public String updatePatient(@PathVariable(name = "id") Long id, PatientBean updatedPatient, RedirectAttributes ra) {
         patientsProxy.updatePatient(id, updatedPatient);
         ra.addFlashAttribute("message", "les informations de votre patient ont été mises à jour!");
         log.info("maj transmise");
@@ -80,7 +80,7 @@ public class mediscreenUiController {
 //        return "updateNote";
 //    }
     @GetMapping("addNote/{id}")
-    public String showPatientNoteForm(@PathVariable Long id, Model model) {
+    public String showPatientNoteForm(@PathVariable(name = "id") Long id, Model model) {
         NoteBean noteBean = new NoteBean();
         PatientBean patientBean = patientsProxy.recupererUnPatient(id);
         // Récupérer les anciennes notes du patient à partir de l'API Note
@@ -94,7 +94,7 @@ public class mediscreenUiController {
     }
 
     @PostMapping("addNote/{id}")
-    public String saveNote(@PathVariable("id") Long patientId, @RequestParam("notes") String observation) {
+    public String saveNote(@PathVariable(name = "id") Long patientId, @RequestParam("notes") String observation) {
         // Créez une nouvelle instance de Note avec les données fournies
         NoteBean note = new NoteBean();
         note.setPatientId(patientId);
@@ -109,8 +109,8 @@ public class mediscreenUiController {
     }
 
     @GetMapping("evaluatePatientDiabeteRisk")
-    public String riskEvaluator(@PathVariable("id") Long patientId) {
-      return diabeteAssessmentProxy.evaluerRisque(patientId);
+    public String riskEvaluator(@PathVariable(name = "id") Long patientId) {
+      return diabeteAssessmentProxy.evaluerrisque(patientId);
 
     }
 }

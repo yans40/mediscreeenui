@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "microservice-patients", url = "localhost:8081/apipatient")
+@FeignClient(name = "apipatient", url = "${API_PATIENT_URL}")
 public interface MicroservicePatientsProxy {
-    @GetMapping(value = "/patients")
+    @GetMapping(value = "/apipatient/patients")
     List<PatientBean> listDesPatients();
 
-    @GetMapping("/patients/{id}")
+    @GetMapping(value = "/apipatient/patients/{id}")
     PatientBean recupererUnPatient(@PathVariable("id") Long id);
 
-    @PostMapping("/patients")
+    @PostMapping(value = "/apipatient/patients")
     PatientBean createPatient(@RequestBody PatientBean patient);
-    @PutMapping("/patients/{id}")
+    @PutMapping(value = "/apipatient/patients/{id}")
     PatientBean updatePatient(@PathVariable Long id, @RequestBody PatientBean updatedPatient);
 
 }

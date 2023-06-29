@@ -1,0 +1,75 @@
+version: '3.9'
+services:
+  mysql:
+    container_name: mysql
+    build: ../Mediscreen/database
+    ports:
+      - "21001:3306"
+    environment:
+      MYSQL_DATABASE: patient
+      MSQL_ROOT_USERNAME: root
+      MYSQL_ROOT_PASSWORD: N4NTERRE2022!
+    restart: always
+
+
+  mongodb:
+    container_name: mongodb
+    build: ../mediscreenapinotes/database
+    ports:
+      - "21003:27017"
+    restart: always
+
+
+  apipatient:
+    container_name: apipatient
+    build: ../Mediscreen
+    ports:
+      - "9001:9001"
+    depends_on:
+      - mysql
+    environment:
+      spring.datasource.username: "root"
+      spring.datasource.password: "N4NTERRE2022!"
+      spring.datasource.url: "jdbc:mysql://mysql:3306/patient?serverTimezone=UTC"
+    restart: always
+
+  apinotepatient:
+    container_name: apinotepatient
+    build: ../mediscreenapinotes
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongodb
+    environment:
+      - "spring.data.mongodb.uri=mongodb://mongodb:27017/Notes"
+    restart: always
+
+
+  apidiabete:
+    container_name: apidiabete
+    build: ../mediscreenApiDiabetesAssessment
+    ports:
+      - "8083:8083"
+    environment:
+      API_PATIENT_URL: "http://apipatient:9001"
+      API_NOTE_URL: "http://apinotepatient:8082"
+    depends_on:
+      - apipatient
+      - apinotepatient
+    restart: always
+
+
+
+  mediscreenui:
+    container_name: mediscreenui
+    build: ../clientmediscreenui
+    ports:
+      - "8080:8080"
+    environment:
+      API_PATIENT_URL: "http://apipatient:9001"
+      API_NOTE_URL: "http://apinotepatient:8082"
+      API_DIABETE_URL: "http://apidiabete:8083"
+    depends_on:
+      - apipatient
+      - apinotepatient
+      - apidiabete
