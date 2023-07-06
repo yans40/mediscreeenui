@@ -73,12 +73,19 @@ public class mediscreenUiController {
         return "redirect:/";
     }
 
-//    @GetMapping("/updateNote/{id}")
-//    public String showNoteupdateForm(@PathVariable("id") Long id, Model model) {
-//
-//        log.info("dirige vers le formulaire de mise à jour des notes");
-//        return "updateNote";
-//    }
+    @GetMapping("/editNote/{id}")
+    public String showNoteUpdateForNm(@PathVariable(name = "id") String id, Model model) {
+        NoteBean noteBean = notesProxy.getNotesById(id);
+        model.addAttribute("note", noteBean);
+        return "updateNote";
+    }
+
+    @PostMapping("/notes/{id}")
+    public String updateNote(@PathVariable(name = "id") String id, NoteBean noteBean) {
+        notesProxy.updateNote(id, noteBean);
+        return "redirect:/addNote/" + noteBean.getPatientId();
+    }
+
     @GetMapping("addNote/{id}")
     public String showPatientNoteForm(@PathVariable(name = "id") Long id, Model model) {
         NoteBean noteBean = new NoteBean();
@@ -110,7 +117,15 @@ public class mediscreenUiController {
 
     @GetMapping("evaluatePatientDiabeteRisk")
     public String riskEvaluator(@PathVariable(name = "id") Long patientId) {
-      return diabeteAssessmentProxy.evaluerrisque(patientId);
+        return diabeteAssessmentProxy.evaluerrisque(patientId);
 
     }
+
+    @GetMapping("deleteNote/{id}")
+    public String deleteNote(@PathVariable(name = "id") String id) {
+        NoteBean noteBean = notesProxy.getNotesById(id);
+        notesProxy.deleteNote(id);
+        return "redirect:/addNote/"+ noteBean.getPatientId();
+    }
+
 }
