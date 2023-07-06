@@ -111,7 +111,6 @@ public class mediscreenUiController {
         // Appelez le service pour persister la note
         notesProxy.saveNote(note);
 
-        // Redirigez vers la page d'accueil ou une autre vue si nécessaire
         return "redirect:/addNote/{id}";
     }
 
